@@ -1,0 +1,57 @@
+{
+  "team": "rockaway-ventures",
+  "title": "Rockaway Ventures Meeting Prep",
+  "date": "2026-06-08",
+  "scope": "Upcoming meetings from 11:55 on June 8, 2026",
+  "generated_at": "2026-06-08T11:55:00+02:00",
+  "summary": [
+    "2 upcoming meetings prepared.",
+    "Main themes: fund admin follow-up and founder diligence.",
+    "Most important prep item: confirm owner/date on the open Aztec follow-up."
+  ],
+  "top_alerts": [
+    "13:00 Fund admin: unresolved ownership question from prior call.",
+    "15:30 Founder call: ask for updated hiring and runway plan."
+  ],
+  "meetings": [
+    {
+      "time": "13:00",
+      "title": "Fund Admin Follow-Up",
+      "status": "confirmed",
+      "attendees": ["Max Palko", "Andrea Lauren"],
+      "likely_topic": "Open fund administration follow-ups",
+      "why_it_matters": ["This appears tied to an unresolved administrative dependency."],
+      "last_known_context": ["Prior meeting notes mention an Aztec follow-up owner still needing confirmation."],
+      "previous_discussion": ["The last discussion centered on decision authority and next owner/date."],
+      "open_threads": ["Confirm the owner for the Aztec follow-up.", "Agree when the updated material is due."],
+      "people_notes": ["Max appears to be the internal driver for the follow-up."],
+      "sensitive_signals": ["Possible timing sensitivity inferred from repeated date questions; treat as an inference."],
+      "suggested_discussion_plan": ["Open by confirming the current status.", "Resolve owner/date.", "Close with written next steps."],
+      "questions_to_ask": ["Who owns the next Aztec response?", "What date should be treated as committed?"],
+      "watchouts": ["Do not present inferred timing sensitivity as fact."],
+      "retrieval_gaps": [],
+      "sources": [
+        "00-inbox/meetings/historical/example-fund-admin-follow-up - used for prior discussion",
+        "people/max-palko - used for ownership context"
+      ]
+    },
+    {
+      "time": "15:30",
+      "title": "Founder Diligence",
+      "status": "tentative",
+      "attendees": ["External Founder", "Rockaway Ventures"],
+      "likely_topic": "Company diligence update",
+      "why_it_matters": ["External founder meeting with potential diligence implications."],
+      "last_known_context": ["Thin context: no exact prior meeting match in the sample packet."],
+      "previous_discussion": [],
+      "open_threads": ["Clarify current fundraising timeline.", "Ask for hiring and runway update."],
+      "people_notes": [],
+      "sensitive_signals": [],
+      "suggested_discussion_plan": ["Confirm intended agenda.", "Ask about changes since the last touchpoint.", "Capture next owner and timing."],
+      "questions_to_ask": ["What changed since the last update?", "What is the current runway?", "What should Rockaway review next?"],
+      "watchouts": ["Tentative calendar status; verify attendance before over-preparing."],
+      "retrieval_gaps": ["No reliable prior meeting match found in sample data."],
+      "sources": ["calendar invite - used for title/time/attendees"]
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+:root {
+  --ink: #171717;
+  --muted: #5b6472;
+  --line: #d8dee8;
+  --soft: #f4f6f8;
+  --accent: #0f766e;
+  --accent-dark: #134e4a;
+  --warn: #8a4b0f;
+  --warn-bg: #fff7ed;
+}
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 16mm;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--ink);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 10.5px;
+  line-height: 1.38;
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: 0;
+  margin: 0;
+}
+
+h1 {
+  color: var(--accent-dark);
+  font-size: 24px;
+  line-height: 1.08;
+}
+
+h2 {
+  color: var(--accent-dark);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+h3 {
+  font-size: 12px;
+  margin: 10px 0 4px;
+}
+
+p {
+  margin: 0 0 6px;
+}
+
+ul,
+ol {
+  margin: 4px 0 8px 18px;
+  padding: 0;
+}
+
+li {
+  margin: 2px 0;
+}
+
+.packet-header {
+  border-bottom: 2px solid var(--accent);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr auto;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 9.5px;
+  text-align: right;
+}
+
+.summary {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  margin-bottom: 14px;
+  padding: 10px 12px;
+}
+
+.summary-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.meeting {
+  break-before: page;
+  padding-top: 2px;
+}
+
+.meeting:first-of-type {
+  break-before: auto;
+}
+
+.meeting-header {
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr auto;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+}
+
+.meeting-time {
+  color: var(--accent-dark);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.attendees {
+  color: var(--muted);
+  font-size: 9.5px;
+  margin-top: 3px;
+}
+
+.section {
+  break-inside: avoid;
+  margin-bottom: 7px;
+}
+
+.sensitive {
+  background: var(--warn-bg);
+  border-left: 3px solid var(--warn);
+  padding: 7px 9px;
+}
+
+.gap {
+  border-left: 3px solid var(--line);
+  color: var(--muted);
+  padding-left: 8px;
+}
+
+.recommendation {
+  border-left: 3px solid var(--accent);
+  padding-left: 8px;
+}
+
+.label {
+  color: var(--muted);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.footer-note {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 8.5px;
+  margin-top: 12px;
+  padding-top: 6px;
+}

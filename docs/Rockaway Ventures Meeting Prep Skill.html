@@ -4,15 +4,18 @@
   <meta charset="utf-8">
   <title>Rockaway Ventures Meeting Prep Skill</title>
   <style>
-    @page { size: A4; margin: 15mm 15mm 16mm; }
+    @page { size: A4; margin: 13mm 13mm 15mm; }
     :root {
       --ink: #15171a;
       --muted: #5d6673;
       --line: #d9e0e8;
       --soft: #f5f7f9;
       --accent: #0f766e;
-      --accent-2: #1f4f46;
-      --gold: #9a6a16;
+      --accent-2: #153f39;
+      --gold: #a26b05;
+      --paper: #fbfaf7;
+      --cream: #fff7e8;
+      --deep: #0e2624;
     }
     * { box-sizing: border-box; }
     body {
@@ -20,6 +23,7 @@
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-size: 10.5px;
       line-height: 1.42;
+      background: var(--paper);
       margin: 0;
     }
     h1, h2, h3, p { margin: 0; }
@@ -32,7 +36,7 @@
       font-size: 8.8px;
     }
     pre {
-      background: #101820;
+      background: var(--deep);
       color: #eef7f4;
       border-radius: 7px;
       line-height: 1.36;
@@ -43,17 +47,23 @@
     ul, ol { margin: 5px 0 9px 18px; padding: 0; }
     li { margin: 2px 0; }
     .cover {
-      border-bottom: 3px solid var(--accent);
+      background: linear-gradient(135deg, #0e2624 0%, #174c45 62%, #b8790b 180%);
+      border-radius: 14px;
+      color: white;
       display: grid;
       grid-template-columns: 1fr 78px;
       gap: 18px;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
+      margin-bottom: 14px;
+      min-height: 178px;
+      padding: 22px 22px 18px;
     }
+    .cover h1 { color: white; font-size: 34px; max-width: 520px; }
+    .cover .label, .cover .subtitle, .cover .meta { color: rgba(255,255,255,.82); }
     .mark {
       align-items: center;
-      background: var(--accent-2);
-      border-radius: 10px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 16px;
       color: white;
       display: flex;
       font-size: 25px;
@@ -81,20 +91,27 @@
       grid-template-columns: 1fr 1fr;
     }
     .card {
-      background: var(--soft);
+      background: white;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 11px 12px;
+      border-radius: 11px;
+      box-shadow: 0 8px 22px rgba(15, 36, 34, .07);
+      padding: 12px 13px;
     }
     .band {
-      border-left: 4px solid var(--accent);
-      margin: 11px 0;
-      padding-left: 11px;
+      background: var(--cream);
+      border: 1px solid #f1d6a8;
+      border-left: 5px solid var(--gold);
+      border-radius: 10px;
+      margin: 12px 0;
+      padding: 11px 13px;
     }
     .step {
       break-inside: avoid;
-      border-top: 1px solid var(--line);
-      padding: 10px 0 2px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin: 8px 0;
+      padding: 11px 12px 4px;
     }
     .label {
       color: var(--gold);
@@ -106,6 +123,27 @@
     }
     .page-break { break-before: page; }
     .small { color: var(--muted); font-size: 9px; }
+    .hero-install {
+      background: white;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(15, 118, 110, .12);
+      margin: 12px 0;
+      padding: 12px;
+    }
+    .number {
+      align-items: center;
+      background: var(--accent);
+      border-radius: 999px;
+      color: white;
+      display: inline-flex;
+      font-size: 10px;
+      font-weight: 800;
+      height: 22px;
+      justify-content: center;
+      margin-right: 7px;
+      width: 22px;
+    }
     .do-dont {
       display: grid;
       gap: 10px;
@@ -159,22 +197,20 @@
   </section>
 
   <section class="page-break">
-    <h2>1. Download And Install</h2>
-    <div class="step">
-      <div class="label">Easiest path</div>
-      <p>Open the GitHub repository, click <strong>Code</strong>, choose <strong>Download ZIP</strong>, unzip the file, then double-click:</p>
-      <pre>setup.command</pre>
-      <p>The setup window installs the skill, asks for your bearer token, and connects the Ventures MCP.</p>
+    <h2><span class="number">1</span>Install The Skill</h2>
+    <div class="hero-install">
+      <div class="label">One command</div>
+      <pre>npx -y skills@latest add zabrodsk/rockaway-ventures-meeting-prep-skill -g --agent codex claude-code --copy -y --full-depth && "$HOME/.agents/skills/rockaway-ventures-meeting-prep/setup.command"</pre>
+      <p>This installs the skill for Codex and Claude Code, then runs setup.</p>
     </div>
 
     <div class="step">
-      <div class="label">One-command install</div>
-      <pre>/bin/bash -lc 'tmp=$(mktemp -d); gh repo clone zabrodsk/rockaway-ventures-meeting-prep-skill "$tmp/skill" -- --depth 1 && "$tmp/skill/setup.command"'</pre>
-      <p class="small">Use this if GitHub CLI is already installed and signed in.</p>
+      <div class="label">Message you can send to Codex or Claude</div>
+      <pre>please install the meeting prep skill from the GitHub repo and run the setup command. This is my bearer token:</pre>
     </div>
 
     <div class="step">
-      <div class="label">Skill command</div>
+      <div class="label">After setup, use</div>
       <pre>$rockaway-ventures-meeting-prep prep me for today
 $rockaway-ventures-meeting-prep prep me for my next meeting
 $rockaway-ventures-meeting-prep prep me for tomorrow</pre>
@@ -182,12 +218,13 @@ $rockaway-ventures-meeting-prep prep me for tomorrow</pre>
   </section>
 
   <section>
-    <h2>2. Configure The Ventures MCP</h2>
-    <p>Ask the Rockaway brain admin for your Ventures bearer token. Treat the token like a password. Paste it into the setup window when Terminal asks for it.</p>
+    <h2><span class="number">2</span>Connect The Ventures Brain</h2>
+    <p>Ask the Rockaway brain admin for your Ventures bearer token. Setup connects the Ventures brain automatically. The manual commands below are here for reference.</p>
 
     <div class="step">
-      <div class="label">Message you can send to Codex or Claude</div>
-      <pre>Please install the Rockaway Ventures Meeting Prep skill from the GitHub repo and run setup.command. When Terminal asks for my bearer token, pause so I can paste it into Terminal.</pre>
+      <div class="label">What the setup connects</div>
+      <pre>rockaway-ventures
+http://100.102.180.108:8789/rockaway-ventures/mcp</pre>
     </div>
 
     <div class="step">
@@ -216,7 +253,7 @@ bearer_token_env_var = "ROCKAWAY_VENTURES_MCP_TOKEN"</pre>
   </section>
 
   <section class="page-break">
-    <h2>3. How To Read The Packet</h2>
+    <h2><span class="number">3</span>Read The Packet</h2>
     <div class="grid">
       <div class="card">
         <h3>Day Summary</h3>

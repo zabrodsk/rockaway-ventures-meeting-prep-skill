@@ -1,97 +1,68 @@
-# Rockaway Ventures Meeting Prep Skill
+# Rockaway Ventures Meeting Prep
 
-This package installs a private meeting-prep skill for Rockaway Ventures. It scans the user's connected calendar/account context, retrieves the relevant institutional memory from the read-only Rockaway Ventures MCP brain, and produces a dense PDF packet for the remaining meetings in scope.
+This adds a meeting-prep helper to Codex or Claude Code.
 
-The skill produces three outputs every run:
+It looks at your calendar, checks the Rockaway Ventures brain, and creates a private meeting-prep packet for your upcoming meetings.
 
-- PDF packet: the primary meeting-prep artifact.
-- Markdown source: editable notes with full source trail.
-- Chat summary: compact links and top priorities.
+You get:
 
-## Easiest Install
+- a polished PDF packet
+- an editable markdown version
+- a short chat summary with the most important points
 
-Open the GitHub repository, click **Code**, then **Download ZIP**. Unzip it and double-click:
+## Install
+
+Open Terminal and paste this:
+
+```bash
+npx -y skills@latest add zabrodsk/rockaway-ventures-meeting-prep-skill -g --agent codex claude-code --copy -y --full-depth && "$HOME/.agents/skills/rockaway-ventures-meeting-prep/setup.command"
+```
+
+The setup will ask for your bearer token.
+
+## If You Want Codex Or Claude To Do It
+
+Send this message:
 
 ```text
-setup.command
+please install the meeting prep skill from the GitHub repo and run the setup command. This is my bearer token:
 ```
 
-The setup window will ask for your bearer token and put it in the right local place.
+Then paste your bearer token after the colon.
 
-One-command install for people who already have GitHub CLI:
+## How To Use It
 
-```bash
-/bin/bash -lc 'tmp=$(mktemp -d); gh repo clone zabrodsk/rockaway-ventures-meeting-prep-skill "$tmp/skill" -- --depth 1 && "$tmp/skill/setup.command"'
-```
+After setup, restart Codex or Claude Code.
 
-## Manual Install
-
-```bash
-git clone https://github.com/zabrodsk/rockaway-ventures-meeting-prep-skill.git
-cd rockaway-ventures-meeting-prep-skill
-./setup.command
-```
-
-Restart Codex or Claude Code after installation if it was already open.
-
-## Configure Rockaway Ventures MCP
-
-Ask the Rockaway brain admin for your Ventures bearer token. During setup, paste it into the Terminal window when asked. Do not paste the token into chat or shared docs.
-
-Claude Code:
-
-```bash
-claude mcp add rockaway-ventures --transport http \
-  http://100.102.180.108:8789/rockaway-ventures/mcp \
-  --header "Authorization: Bearer USER_TOKEN"
-```
-
-Codex CLI:
-
-```bash
-export ROCKAWAY_VENTURES_MCP_TOKEN="USER_TOKEN"
-codex mcp add rockaway-ventures \
-  --url http://100.102.180.108:8789/rockaway-ventures/mcp \
-  --bearer-token-env-var ROCKAWAY_VENTURES_MCP_TOKEN
-codex mcp get rockaway-ventures
-```
-
-Codex config equivalent in `~/.codex/config.toml`:
-
-```toml
-[mcp_servers.rockaway-ventures]
-url = "http://100.102.180.108:8789/rockaway-ventures/mcp"
-bearer_token_env_var = "ROCKAWAY_VENTURES_MCP_TOKEN"
-```
-
-The `ROCKAWAY_VENTURES_MCP_TOKEN` environment variable must be available to the Codex process when it starts.
-
-## Use
+Then ask:
 
 ```text
 $rockaway-ventures-meeting-prep prep me for today
+```
+
+You can also ask:
+
+```text
 $rockaway-ventures-meeting-prep prep me for my next meeting
 $rockaway-ventures-meeting-prep prep me for tomorrow
 ```
 
-By default, `today` means remaining meetings from now onward. Use "whole day" or "include past meetings" if you want the full date.
+## Where The Packet Goes
 
-## Output Location
-
-```text
-~/Rockaway Meeting Briefs/ventures/YYYY-MM-DD/
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.pdf
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.md
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.html
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.json
-```
-
-Same-day reruns overwrite the default files.
-
-## Guide
-
-Open the PDF introduction:
+The files are saved here:
 
 ```text
-docs/Rockaway Ventures Meeting Prep Skill.pdf
+~/Rockaway Meeting Briefs/ventures/
 ```
+
+Open the PDF first. The markdown file is there if you want to inspect sources or edit the notes.
+
+## Setup Guide
+
+Open this PDF:
+
+[Rockaway Ventures Meeting Prep Skill.pdf](docs/Rockaway%20Ventures%20Meeting%20Prep%20Skill.pdf)
+
+## Need A Token?
+
+Ask the Rockaway brain admin for a Rockaway Ventures bearer token.
