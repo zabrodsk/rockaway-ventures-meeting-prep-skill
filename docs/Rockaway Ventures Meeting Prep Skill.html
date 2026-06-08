@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Rockaway Ventures Meeting Prep Skill</title>
+  <style>
+    @page { size: A4; margin: 15mm 15mm 16mm; }
+    :root {
+      --ink: #15171a;
+      --muted: #5d6673;
+      --line: #d9e0e8;
+      --soft: #f5f7f9;
+      --accent: #0f766e;
+      --accent-2: #1f4f46;
+      --gold: #9a6a16;
+    }
+    * { box-sizing: border-box; }
+    body {
+      color: var(--ink);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 10.5px;
+      line-height: 1.42;
+      margin: 0;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { color: var(--accent-2); font-size: 31px; line-height: 1.05; }
+    h2 { color: var(--accent-2); font-size: 17px; margin: 0 0 8px; }
+    h3 { font-size: 12px; margin: 10px 0 4px; }
+    p { margin-bottom: 7px; }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 8.8px;
+    }
+    pre {
+      background: #101820;
+      color: #eef7f4;
+      border-radius: 7px;
+      line-height: 1.36;
+      margin: 7px 0 10px;
+      padding: 9px 10px;
+      white-space: pre-wrap;
+    }
+    ul, ol { margin: 5px 0 9px 18px; padding: 0; }
+    li { margin: 2px 0; }
+    .cover {
+      border-bottom: 3px solid var(--accent);
+      display: grid;
+      grid-template-columns: 1fr 78px;
+      gap: 18px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+    }
+    .mark {
+      align-items: center;
+      background: var(--accent-2);
+      border-radius: 10px;
+      color: white;
+      display: flex;
+      font-size: 25px;
+      font-weight: 800;
+      height: 78px;
+      justify-content: center;
+      width: 78px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+      max-width: 550px;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 9px;
+      margin-top: 12px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .grid {
+      display: grid;
+      gap: 11px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 12px;
+    }
+    .band {
+      border-left: 4px solid var(--accent);
+      margin: 11px 0;
+      padding-left: 11px;
+    }
+    .step {
+      break-inside: avoid;
+      border-top: 1px solid var(--line);
+      padding: 10px 0 2px;
+    }
+    .label {
+      color: var(--gold);
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+    .page-break { break-before: page; }
+    .small { color: var(--muted); font-size: 9px; }
+    .do-dont {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 8.5px;
+      margin-top: 14px;
+      padding-top: 7px;
+    }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div>
+      <div class="label">Rockaway Ventures</div>
+      <h1>Meeting Prep Skill</h1>
+      <p class="subtitle">A private daily preparation packet for Ventures meetings, built from calendar context and the read-only Rockaway Ventures Brain.</p>
+      <p class="meta">PDF packet + markdown source + compact chat summary</p>
+    </div>
+    <div class="mark">RV</div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>What It Does</h2>
+      <ul>
+        <li>Looks at the user's connected calendar/account context.</li>
+        <li>Prepares every in-scope Ventures meeting, with `today` meaning remaining meetings from now onward.</li>
+        <li>Retrieves context from the read-only Rockaway Ventures MCP brain.</li>
+        <li>Creates a dense executive PDF packet designed to read quickly before calls.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>What It Produces</h2>
+      <ul>
+        <li><strong>PDF:</strong> the primary artifact, with no source trail.</li>
+        <li><strong>Markdown:</strong> editable source with full source trail.</li>
+        <li><strong>Chat:</strong> a short summary with file links and top priorities.</li>
+        <li><strong>JSON/HTML:</strong> structured source and preview files.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band">
+    <h2>Default Behavior</h2>
+    <p>The skill creates one all-day packet by default. If run halfway through the day, it prepares upcoming meetings only. Use "whole day" or "include past meetings" when you want the full date.</p>
+    <p>It excludes declined and cancelled events, includes tentative events with a status marker, and creates only a stub for private/busy events with no details.</p>
+  </section>
+
+  <section class="page-break">
+    <h2>1. Download And Install</h2>
+    <div class="step">
+      <div class="label">GitHub repository</div>
+      <pre>git clone https://github.com/zabrodsk/rockaway-ventures-meeting-prep-skill.git
+cd rockaway-ventures-meeting-prep-skill
+./install.sh</pre>
+      <p class="small">Restart Codex or Claude Code after installation if it was already open.</p>
+    </div>
+
+    <div class="step">
+      <div class="label">Skill command</div>
+      <pre>$rockaway-ventures-meeting-prep prep me for today
+$rockaway-ventures-meeting-prep prep me for my next meeting
+$rockaway-ventures-meeting-prep prep me for tomorrow</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Configure The Ventures MCP</h2>
+    <p>Ask the Rockaway brain admin for your Ventures bearer token. Treat the token like a password. Do not paste it into shared docs or commit it to GitHub.</p>
+
+    <div class="step">
+      <div class="label">Claude Code</div>
+      <pre>claude mcp add rockaway-ventures --transport http \
+  http://100.102.180.108:8789/rockaway-ventures/mcp \
+  --header "Authorization: Bearer USER_TOKEN"</pre>
+    </div>
+
+    <div class="step">
+      <div class="label">Codex CLI</div>
+      <pre>export ROCKAWAY_VENTURES_MCP_TOKEN="USER_TOKEN"
+codex mcp add rockaway-ventures \
+  --url http://100.102.180.108:8789/rockaway-ventures/mcp \
+  --bearer-token-env-var ROCKAWAY_VENTURES_MCP_TOKEN
+codex mcp get rockaway-ventures</pre>
+    </div>
+
+    <div class="step">
+      <div class="label">Codex config equivalent</div>
+      <pre>[mcp_servers.rockaway-ventures]
+url = "http://100.102.180.108:8789/rockaway-ventures/mcp"
+bearer_token_env_var = "ROCKAWAY_VENTURES_MCP_TOKEN"</pre>
+      <p class="small">The environment variable must be available to Codex when it starts.</p>
+    </div>
+  </section>
+
+  <section class="page-break">
+    <h2>3. How To Read The Packet</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Day Summary</h3>
+        <p>Use the first page to see the main themes, urgent prep items, and the meetings that need the most attention.</p>
+      </div>
+      <div class="card">
+        <h3>Per-Meeting Sections</h3>
+        <p>Each meeting has context, previous discussion, open threads, people notes, sensitive signals, suggested talk track, questions, and watchouts.</p>
+      </div>
+      <div class="card">
+        <h3>Recommendations</h3>
+        <p>Suggested agendas and talk tracks are marked as recommendations, not retrieved facts.</p>
+      </div>
+      <div class="card">
+        <h3>Audit Trail</h3>
+        <p>The PDF omits source details for readability. Open the markdown file when you want the full source trail.</p>
+      </div>
+    </div>
+
+    <div class="band">
+      <h2>Output Location</h2>
+      <pre>~/Rockaway Meeting Briefs/ventures/YYYY-MM-DD/
+  rockaway-ventures-meeting-prep-YYYY-MM-DD.pdf
+  rockaway-ventures-meeting-prep-YYYY-MM-DD.md
+  rockaway-ventures-meeting-prep-YYYY-MM-DD.html
+  rockaway-ventures-meeting-prep-YYYY-MM-DD.json</pre>
+      <p>Same-day reruns overwrite the default files so the latest packet stays easy to find.</p>
+    </div>
+  </section>
+
+  <section class="do-dont">
+    <div class="card">
+      <h2>Use It For</h2>
+      <ul>
+        <li>Partner meetings.</li>
+        <li>Founder or deal calls.</li>
+        <li>Fund administration follow-ups.</li>
+        <li>Board, IC, and portfolio discussions.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Boundaries</h2>
+      <ul>
+        <li>Read-only brain access.</li>
+        <li>No calendar writeback.</li>
+        <li>No direct brain edits.</li>
+        <li>No source trail in the PDF or chat summary.</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="footer">Rockaway Ventures Meeting Prep Skill. Private meeting preparation using the Rockaway Ventures MCP brain.</p>
+</body>
+</html>
