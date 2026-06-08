@@ -9,7 +9,6 @@ You get:
 - a polished PDF packet
 - an editable markdown version
 - a short chat summary with the most important points
-- direct read-only access to ask questions against the Rockaway Ventures brain from Claude Code or Codex
 
 ## Install
 
@@ -35,15 +34,7 @@ Then paste your bearer token after the colon.
 
 After setup, restart Codex or Claude Code.
 
-Ask the brain directly:
-
-```text
-What does the Rockaway Ventures brain know about this company?
-Search the Ventures brain for recent notes about this founder.
-What open threads do we have around this deal?
-```
-
-Or run the meeting-prep skill:
+Then ask:
 
 ```text
 $rockaway-ventures-meeting-prep prep me for today
@@ -65,17 +56,6 @@ The files are saved here:
 ```
 
 Open the PDF first. The markdown file is there if you want to inspect sources or edit the notes.
-
-## What Gets Connected
-
-The setup connects only the read-only Rockaway Ventures MCP:
-
-```text
-rockaway-ventures
-http://100.102.180.108:8789/rockaway-ventures/mcp
-```
-
-It can search and read the Ventures brain. It cannot edit the brain.
 
 ## Setup Guide
 

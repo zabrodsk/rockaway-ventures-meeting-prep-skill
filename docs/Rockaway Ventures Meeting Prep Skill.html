@@ -178,7 +178,6 @@
         <li>Looks at the user's connected calendar/account context.</li>
         <li>Prepares every in-scope Ventures meeting, with `today` meaning remaining meetings from now onward.</li>
         <li>Retrieves context from the read-only Rockaway Ventures MCP brain.</li>
-        <li>Lets Claude Code or Codex answer direct questions against the Ventures brain.</li>
         <li>Creates a dense executive PDF packet designed to read quickly before calls.</li>
       </ul>
     </div>
@@ -214,13 +213,6 @@
 
     <div class="step">
       <div class="label">After setup, use</div>
-      <pre>What does the Rockaway Ventures brain know about this company?
-Search the Ventures brain for recent notes about this founder.
-What open threads do we have around this deal?</pre>
-    </div>
-
-    <div class="step">
-      <div class="label">Or run meeting prep</div>
       <pre>$rockaway-ventures-meeting-prep prep me for today
 $rockaway-ventures-meeting-prep prep me for my next meeting
 $rockaway-ventures-meeting-prep prep me for tomorrow</pre>
@@ -297,7 +289,6 @@ bearer_token_env_var = "ROCKAWAY_VENTURES_MCP_TOKEN"</pre>
       <h2>Boundaries</h2>
       <ul>
         <li>Read-only brain access.</li>
-        <li>Direct search/query from Claude Code or Codex.</li>
         <li>No calendar writeback.</li>
         <li>No direct brain edits.</li>
         <li>No source trail in the PDF or chat summary.</li>
