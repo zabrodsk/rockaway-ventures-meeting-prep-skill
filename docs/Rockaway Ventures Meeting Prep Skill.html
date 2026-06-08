@@ -202,8 +202,8 @@
     <h2><span class="number">1</span>Install The Skill</h2>
     <div class="hero-install">
       <div class="label">One command</div>
-      <pre>bash -c "$(curl -fsSL https://raw.githubusercontent.com/zabrodsk/rockaway-ventures-meeting-prep-skill/main/bootstrap.sh)"</pre>
-      <p>This installs the skill for Codex and Claude Code, then runs setup.</p>
+      <pre>npx -y skills@latest add zabrodsk/rockaway-ventures-meeting-prep-skill -g -a codex claude-code --copy -y --full-depth &amp;&amp; "$HOME/.agents/skills/rockaway-ventures-meeting-prep/setup.command"</pre>
+      <p>This downloads the skill for Codex and Claude Code, then runs setup.</p>
     </div>
 
     <div class="step">
