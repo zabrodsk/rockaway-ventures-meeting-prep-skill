@@ -224,6 +224,7 @@ function renderPdf(htmlPath, pdfPath) {
     "--disable-gpu",
     "--disable-sync",
     "--hide-scrollbars",
+    "--no-pdf-header-footer",
     "--no-first-run",
     "--no-default-browser-check",
     "--run-all-compositor-stages-before-draw",

@@ -33,7 +33,7 @@
     p { margin-bottom: 7px; }
     code, pre {
       font-family: "SFMono-Regular", Consolas, monospace;
-      font-size: 8.8px;
+      font-size: 7.2px;
     }
     pre {
       background: var(--deep);
@@ -42,7 +42,9 @@
       line-height: 1.36;
       margin: 7px 0 10px;
       padding: 9px 10px;
-      white-space: pre-wrap;
+      overflow: hidden;
+      text-overflow: clip;
+      white-space: pre;
     }
     ul, ol { margin: 5px 0 9px 18px; padding: 0; }
     li { margin: 2px 0; }
@@ -200,7 +202,7 @@
     <h2><span class="number">1</span>Install The Skill</h2>
     <div class="hero-install">
       <div class="label">One command</div>
-      <pre>npx -y skills@latest add zabrodsk/rockaway-ventures-meeting-prep-skill -g --agent codex claude-code --copy -y --full-depth && "$HOME/.agents/skills/rockaway-ventures-meeting-prep/setup.command"</pre>
+      <pre>bash -c "$(curl -fsSL https://raw.githubusercontent.com/zabrodsk/rockaway-ventures-meeting-prep-skill/main/bootstrap.sh)"</pre>
       <p>This installs the skill for Codex and Claude Code, then runs setup.</p>
     </div>
 
@@ -219,7 +221,7 @@ $rockaway-ventures-meeting-prep prep me for tomorrow</pre>
 
   <section>
     <h2><span class="number">2</span>Connect The Ventures Brain</h2>
-    <p>Ask the Rockaway brain admin for your Ventures bearer token. Setup connects the Ventures brain automatically. The manual commands below are here for reference.</p>
+    <p>Ask the Rockaway brain admin for your Ventures bearer token. Setup connects the Ventures brain automatically.</p>
 
     <div class="step">
       <div class="label">What the setup connects</div>
@@ -228,19 +230,8 @@ http://100.102.180.108:8789/rockaway-ventures/mcp</pre>
     </div>
 
     <div class="step">
-      <div class="label">Claude Code manual setup</div>
-      <pre>claude mcp add rockaway-ventures --transport http \
-  http://100.102.180.108:8789/rockaway-ventures/mcp \
-  --header "Authorization: Bearer USER_TOKEN"</pre>
-    </div>
-
-    <div class="step">
-      <div class="label">Codex manual setup</div>
-      <pre>export ROCKAWAY_VENTURES_MCP_TOKEN="USER_TOKEN"
-codex mcp add rockaway-ventures \
-  --url http://100.102.180.108:8789/rockaway-ventures/mcp \
-  --bearer-token-env-var ROCKAWAY_VENTURES_MCP_TOKEN
-codex mcp get rockaway-ventures</pre>
+      <div class="label">Manual setup command</div>
+      <pre>~/.agents/skills/rockaway-ventures-meeting-prep/setup.command</pre>
     </div>
 
     <div class="step">

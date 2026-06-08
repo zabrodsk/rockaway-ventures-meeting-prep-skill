@@ -90,10 +90,7 @@ Do not include blank note-taking space.
 Build a structured JSON packet, then call the bundled renderer from this skill folder. In Claude Code, prefer `${CLAUDE_SKILL_DIR}`:
 
 ```bash
-"${CLAUDE_SKILL_DIR}/.rockaway-meeting-prep-common/scripts/render_packet.js" \
-  --input /path/to/packet.json \
-  --out-dir "$HOME/Rockaway Meeting Briefs/ventures/YYYY-MM-DD" \
-  --slug rockaway-ventures-meeting-prep-YYYY-MM-DD
+"${CLAUDE_SKILL_DIR}/.rockaway-meeting-prep-common/scripts/render_packet.js" --input /path/to/packet.json --out-dir "$HOME/Rockaway Meeting Briefs/ventures/YYYY-MM-DD" --slug rockaway-ventures-meeting-prep-YYYY-MM-DD
 ```
 
 If `${CLAUDE_SKILL_DIR}` is unavailable, look for the renderer in:

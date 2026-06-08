@@ -15,7 +15,7 @@ You get:
 Open Terminal and paste this:
 
 ```bash
-npx -y skills@latest add zabrodsk/rockaway-ventures-meeting-prep-skill -g --agent codex claude-code --copy -y --full-depth && "$HOME/.agents/skills/rockaway-ventures-meeting-prep/setup.command"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/zabrodsk/rockaway-ventures-meeting-prep-skill/main/bootstrap.sh)"
 ```
 
 The setup will ask for your bearer token.
