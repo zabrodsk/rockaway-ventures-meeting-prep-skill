@@ -3,6 +3,8 @@
 This adds a meeting-prep helper to Codex or Claude Code.
 
 It looks at your calendar, checks the Rockaway Ventures brain, and creates a private meeting-prep packet for your upcoming meetings.
+QMD search runs on the Mac mini through the MCP using a sanitized Ventures index; no separate QMD install is needed.
+Agents should start brain retrieval with `memory_lookup`. It uses QMD first, then falls back to GBrain, and `get_page` should only be used for the strongest matches.
 
 You get:
 
@@ -46,6 +48,16 @@ You can also ask:
 $rockaway-ventures-meeting-prep prep me for my next meeting
 $rockaway-ventures-meeting-prep prep me for tomorrow
 ```
+
+## CSV Or Quick Memory Lookup
+
+For spreadsheet-style lookup, tell Codex or Claude:
+
+```text
+Use the Rockaway memory lookup skill for this team. For each CSV row, call memory_lookup first, then get_page only for the strongest matches.
+```
+
+Expected output columns: `row_id`, `query`, `matched_pages`, `confidence`, `summary`, `recommended_next_step`, `source_slugs`.
 
 ## Where The Packet Goes
 

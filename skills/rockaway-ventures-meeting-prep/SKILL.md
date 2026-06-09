@@ -17,6 +17,7 @@ http://100.102.180.108:8789/rockaway-ventures/mcp
 ```
 
 Do not query Rockaway Q unless the user explicitly asks for cross-brain context. Never print or store bearer tokens.
+QMD search runs centrally on the Mac mini through this MCP using a sanitized Ventures QMD index; no separate QMD install is needed on the user's machine.
 
 ## Scope Rules
 
@@ -34,12 +35,12 @@ Default to every in-scope calendar meeting for the user running the skill. For p
 
 For each meeting, do bounded-but-serious retrieval:
 
-1. Search exact title and recurring-series title.
-2. Search company, deal, fund, project, portfolio, and agenda handles.
-3. Search 2-5 key attendees.
-4. Query for prior discussion, open items, next steps, risks, and relationship context.
-5. Open the top 3-7 relevant pages with `get_page`.
-6. Follow `get_links` / `get_backlinks` for the top 1-3 central pages when useful.
+1. Use `memory_lookup` first for broad recall across exact title, recurring-series title, company/deal/fund/project/portfolio handles, key attendees, prior discussion, open items, next steps, risks, and relationship context.
+2. Use `get_page` for the strongest high/medium confidence slug hits from `memory_lookup`.
+3. Use `get_links` / `get_backlinks` for the top 1-3 central pages when relationship or graph context matters.
+4. Use lower-level `qmd_query`, `qmd_search`, `search`, and `query` only when the first pass is weak or the user asks for deeper retrieval.
+
+`memory_lookup` is the stable first-call entrypoint. It uses the endpoint-scoped QMD index first when available and falls back to GBrain. QMD is additive retrieval behind the MCP, not the source of truth for page graph structure. Existing GBrain tools remain canonical for page expansion, links, backlinks, and stats.
 
 For "last time", prefer the previous recurring occurrence; then title/attendee/topic matches; then widen to related pages from the last 90 days. If retrieval is weak, include `Could Not Verify` only for that meeting.
 

@@ -177,7 +177,7 @@
       <ul>
         <li>Looks at the user's connected calendar/account context.</li>
         <li>Prepares every in-scope Ventures meeting, with `today` meaning remaining meetings from now onward.</li>
-        <li>Retrieves context from the read-only Rockaway Ventures MCP brain.</li>
+        <li>Retrieves context from the read-only Rockaway Ventures MCP brain, starting with `memory_lookup`, which uses the sanitized Ventures QMD index first.</li>
         <li>Creates a dense executive PDF packet designed to read quickly before calls.</li>
       </ul>
     </div>
@@ -222,6 +222,7 @@ $rockaway-ventures-meeting-prep prep me for tomorrow</pre>
   <section>
     <h2><span class="number">2</span>Connect The Ventures Brain</h2>
     <p>Ask the Rockaway brain admin for your Ventures bearer token. Setup connects the Ventures brain automatically.</p>
+    <p>QMD search runs on the Mac mini through the MCP using a sanitized Ventures index; no separate QMD install is needed. Agents should call `memory_lookup` first, then `get_page` only for the strongest matches.</p>
 
     <div class="step">
       <div class="label">What the setup connects</div>
@@ -232,6 +233,11 @@ http://100.102.180.108:8789/rockaway-ventures/mcp</pre>
     <div class="step">
       <div class="label">Manual setup command</div>
       <pre>~/.agents/skills/rockaway-ventures-meeting-prep/setup.command</pre>
+    </div>
+
+    <div class="step">
+      <div class="label">CSV or quick lookup prompt</div>
+      <pre>Use the Rockaway memory lookup skill for this team. For each CSV row, call memory_lookup first, then get_page only for the strongest matches.</pre>
     </div>
 
     <div class="step">
