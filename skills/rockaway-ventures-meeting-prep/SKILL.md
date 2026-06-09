@@ -101,7 +101,6 @@ If `${CLAUDE_SKILL_DIR}` is unavailable, look for the renderer in:
 ```text
 $HOME/.codex/skills/rockaway-ventures-meeting-prep/.rockaway-meeting-prep-common/scripts/render_packet.js
 $HOME/.claude/skills/rockaway-ventures-meeting-prep/.rockaway-meeting-prep-common/scripts/render_packet.js
-$HOME/.agents/skills/rockaway-ventures-meeting-prep/.rockaway-meeting-prep-common/scripts/render_packet.js
 ```
 
 The JSON is the source of truth. The renderer writes JSON, markdown, HTML, and PDF. PDF rendering uses headless Chrome.

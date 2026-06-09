@@ -3,4 +3,4 @@ set -euo pipefail
 
 S=rockaway-ventures-meeting-prep
 npx -y skills@latest add zabrodsk/${S}-skill -g -a codex claude-code --copy -y --full-depth
-"$HOME/.agents/skills/${S}/setup.command"
+"$HOME/.codex/skills/${S}/setup.command"
