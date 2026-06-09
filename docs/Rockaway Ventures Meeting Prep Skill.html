@@ -166,7 +166,7 @@
       <div class="label">Rockaway Ventures</div>
       <h1>Meeting Prep Skill</h1>
       <p class="subtitle">A private daily preparation packet for Ventures meetings, built from calendar context and the read-only Rockaway Ventures Brain.</p>
-      <p class="meta">PDF packet + markdown source + compact chat summary</p>
+      <p class="meta">Word document + compact chat summary</p>
     </div>
     <div class="mark">RV</div>
   </section>
@@ -178,16 +178,14 @@
         <li>Looks at the user's connected calendar/account context.</li>
         <li>Prepares every in-scope Ventures meeting, with `today` meaning remaining meetings from now onward.</li>
         <li>Retrieves broad context from the separate Rockaway Ventures QMD MCP, then expands canonical pages through the read-only Ventures brain MCP.</li>
-        <li>Creates a dense executive PDF packet designed to read quickly before calls.</li>
+        <li>Creates a dense executive Word document designed to read quickly before calls.</li>
       </ul>
     </div>
     <div class="card">
       <h2>What It Produces</h2>
       <ul>
-        <li><strong>PDF:</strong> the primary artifact, with no source trail.</li>
-        <li><strong>Markdown:</strong> editable source with full source trail.</li>
+        <li><strong>Word:</strong> the primary artifact, with no source trail.</li>
         <li><strong>Chat:</strong> a short summary with file links and top priorities.</li>
-        <li><strong>JSON/HTML:</strong> structured source and preview files.</li>
       </ul>
     </div>
   </section>
@@ -272,18 +270,15 @@ url = "https://clawdbot--mac-mini.taild9e247.ts.net:8445/mcp"</pre>
       </div>
       <div class="card">
         <h3>Audit Trail</h3>
-        <p>The PDF omits source details for readability. Open the markdown file when you want the full source trail.</p>
+        <p>The Word document omits source details for readability. Use the chat summary for the highest-priority reminders.</p>
       </div>
     </div>
 
     <div class="band">
       <h2>Output Location</h2>
       <pre>~/Rockaway Meeting Briefs/ventures/YYYY-MM-DD/
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.pdf
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.md
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.html
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.json</pre>
-      <p>Same-day reruns overwrite the default files so the latest packet stays easy to find.</p>
+  rockaway-ventures-meeting-prep-YYYY-MM-DD.docx</pre>
+      <p>Same-day reruns overwrite the default Word document so the latest brief stays easy to find.</p>
     </div>
   </section>
 
@@ -303,7 +298,7 @@ url = "https://clawdbot--mac-mini.taild9e247.ts.net:8445/mcp"</pre>
         <li>Read-only brain access.</li>
         <li>No calendar writeback.</li>
         <li>No direct brain edits.</li>
-        <li>No source trail in the PDF or chat summary.</li>
+        <li>No source trail in the Word document or chat summary.</li>
       </ul>
     </div>
   </section>

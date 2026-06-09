@@ -10,12 +10,9 @@ function usage() {
   console.error(`Usage: render_packet.js --input packet.json --out-dir DIR [--slug file-slug]
 
 Writes:
-  DIR/file-slug.json
-  DIR/file-slug.md
-  DIR/file-slug.html
-  DIR/file-slug.pdf
+  DIR/file-slug.docx
 
-The input JSON is the source of truth. PDF rendering uses headless Chrome.`);
+The input JSON is consumed only to build the Word document. No JSON, markdown, HTML, or PDF sidecar is written.`);
 }
 
 function parseArgs(argv) {
@@ -37,16 +34,13 @@ function parseArgs(argv) {
   return args;
 }
 
-function esc(value) {
+function xml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function mdEscape(value) {
-  return String(value ?? "").replace(/\r\n/g, "\n").trim();
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 function asList(items) {
@@ -68,176 +62,175 @@ function validate(packet) {
   if (!Array.isArray(packet.meetings)) throw new Error("packet.meetings must be an array");
 }
 
-function mdSection(title, content) {
-  const lines = asList(content);
-  if (!lines.length) return "";
-  return [`### ${title}`, "", ...lines.map((item) => `- ${mdEscape(item)}`), ""].join("\n");
+function para(text, style = "Normal") {
+  const value = String(text ?? "").trim();
+  if (!value) return "";
+  const styleTag = style === "Normal" ? "" : `<w:pPr><w:pStyle w:val="${style}"/></w:pPr>`;
+  return `<w:p>${styleTag}<w:r><w:t xml:space="preserve">${xml(value)}</w:t></w:r></w:p>`;
 }
 
-function renderMarkdown(packet) {
-  const out = [];
-  out.push(`# ${packet.title || `${packet.team} Meeting Prep`}`);
-  out.push("");
-  out.push(`- Date: ${packet.date}`);
-  out.push(`- Scope: ${packet.scope || "Upcoming meetings"}`);
-  out.push(`- Generated: ${packet.generated_at || new Date().toISOString()}`);
-  out.push("");
+function bullet(text) {
+  return para(`• ${text}`);
+}
 
-  out.push("## Today At A Glance");
-  out.push("");
-  for (const item of asList(packet.summary)) out.push(`- ${mdEscape(item)}`);
-  out.push("");
+function section(title, items) {
+  const values = asList(items);
+  if (!values.length) return "";
+  return [para(title, "Heading3"), ...values.map(bullet)].join("");
+}
 
-  if (asList(packet.top_alerts).length) {
-    out.push("## Top Alerts");
-    out.push("");
-    for (const item of asList(packet.top_alerts)) out.push(`- ${mdEscape(item)}`);
-    out.push("");
+function meetingTitle(meeting) {
+  const title = meeting.title || "Untitled Meeting";
+  return meeting.time ? `${meeting.time} - ${title}` : title;
+}
+
+function renderDocumentXml(packet) {
+  const body = [];
+  body.push(para(packet.title || `${packet.team} Meeting Prep`, "Title"));
+  body.push(para(`Date: ${packet.date}`));
+  body.push(para(`Scope: ${packet.scope || "Upcoming meetings"}`));
+  body.push(para(`Generated: ${packet.generated_at || new Date().toISOString()}`));
+
+  body.push(para("Today At A Glance", "Heading1"));
+  for (const item of asList(packet.summary)) body.push(bullet(item));
+
+  const alerts = asList(packet.top_alerts);
+  if (alerts.length) {
+    body.push(para("Top Alerts", "Heading1"));
+    for (const item of alerts) body.push(bullet(item));
   }
 
   for (const meeting of packet.meetings) {
-    out.push(`## ${meeting.time ? `${meeting.time} - ` : ""}${meeting.title || "Untitled Meeting"}`);
-    out.push("");
-    if (meeting.status) out.push(`- Status: ${meeting.status}`);
-    if (meeting.attendees) out.push(`- Attendees: ${asList(meeting.attendees).join(", ")}`);
-    if (meeting.likely_topic) out.push(`- Likely topic: ${meeting.likely_topic}`);
-    out.push("");
+    body.push(para(meetingTitle(meeting), "Heading1"));
+    if (meeting.status) body.push(para(`Status: ${meeting.status}`));
+    if (meeting.attendees) body.push(para(`Attendees: ${asList(meeting.attendees).join(", ")}`));
+    if (meeting.likely_topic) body.push(para(`Likely topic: ${meeting.likely_topic}`));
 
-    out.push(mdSection("Why This Meeting Matters", meeting.why_it_matters));
-    out.push(mdSection("Last Known Context", meeting.last_known_context));
-    out.push(mdSection("What Was Discussed Previously", meeting.previous_discussion));
-    out.push(mdSection("Open Threads And Follow-Ups", meeting.open_threads));
-    out.push(mdSection("People And Ownership / Relationship Notes", meeting.people_notes));
-    out.push(mdSection("Sensitive Signals", meeting.sensitive_signals));
-    out.push(mdSection("Suggested Discussion Plan (Recommendation)", meeting.suggested_discussion_plan));
-    out.push(mdSection("Questions To Ask", meeting.questions_to_ask));
-    out.push(mdSection("Risks, Blockers, Or Watchouts", meeting.watchouts));
-    out.push(mdSection("Could Not Verify", meeting.retrieval_gaps));
-
-    const sources = asList(meeting.sources);
-    if (sources.length) {
-      out.push("### Source Trail");
-      out.push("");
-      for (const source of sources) out.push(`- ${mdEscape(source)}`);
-      out.push("");
-    }
+    body.push(section("Why This Meeting Matters", meeting.why_it_matters));
+    body.push(section("Last Known Context", meeting.last_known_context));
+    body.push(section("What Was Discussed Previously", meeting.previous_discussion));
+    body.push(section("Open Threads And Follow-Ups", meeting.open_threads));
+    body.push(section("People And Ownership / Relationship Notes", meeting.people_notes));
+    body.push(section("Sensitive Signals", meeting.sensitive_signals));
+    body.push(section("Suggested Discussion Plan (Recommendation)", meeting.suggested_discussion_plan));
+    body.push(section("Questions To Ask", meeting.questions_to_ask));
+    body.push(section("Risks, Blockers, Or Watchouts", meeting.watchouts));
+    body.push(section("Could Not Verify", meeting.retrieval_gaps));
   }
 
-  return out.join("\n").replace(/\n{3,}/g, "\n\n");
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    ${body.filter(Boolean).join("\n")}
+    <w:sectPr>
+      <w:pgSz w:w="12240" w:h="15840"/>
+      <w:pgMar w:top="1008" w:right="1008" w:bottom="1008" w:left="1008" w:header="720" w:footer="720" w:gutter="0"/>
+    </w:sectPr>
+  </w:body>
+</w:document>`;
 }
 
-function htmlList(items) {
-  const values = asList(items);
-  if (!values.length) return "";
-  return `<ul>${values.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`;
+function stylesXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:style w:type="paragraph" w:default="1" w:styleId="Normal">
+    <w:name w:val="Normal"/>
+    <w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos"/><w:sz w:val="22"/></w:rPr>
+    <w:pPr><w:spacing w:after="120" w:line="276" w:lineRule="auto"/></w:pPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Title">
+    <w:name w:val="Title"/>
+    <w:basedOn w:val="Normal"/>
+    <w:rPr><w:b/><w:color w:val="153F39"/><w:sz w:val="44"/></w:rPr>
+    <w:pPr><w:spacing w:after="240"/></w:pPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading1">
+    <w:name w:val="heading 1"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:rPr><w:b/><w:color w:val="0F766E"/><w:sz w:val="30"/></w:rPr>
+    <w:pPr><w:spacing w:before="280" w:after="120"/></w:pPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading3">
+    <w:name w:val="heading 3"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:rPr><w:b/><w:color w:val="A26B05"/><w:sz w:val="23"/></w:rPr>
+    <w:pPr><w:spacing w:before="160" w:after="80"/></w:pPr>
+  </w:style>
+</w:styles>`;
 }
 
-function htmlSection(title, content, className = "") {
-  const values = asList(content);
-  if (!values.length) return "";
-  return `<section class="section ${className}">
-    <div class="label">${esc(title)}</div>
-    ${htmlList(values)}
-  </section>`;
+function contentTypesXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+</Types>`;
 }
 
-function renderHtml(packet, css) {
-  const meetings = packet.meetings.map((meeting) => `
-    <article class="meeting">
-      <div class="meeting-header">
-        <div>
-          <h2>${esc(meeting.title || "Untitled Meeting")}</h2>
-          ${meeting.attendees ? `<div class="attendees">${esc(asList(meeting.attendees).join(", "))}</div>` : ""}
-          ${meeting.likely_topic ? `<div class="attendees">Likely topic: ${esc(meeting.likely_topic)}</div>` : ""}
-          ${meeting.status ? `<div class="attendees">Status: ${esc(meeting.status)}</div>` : ""}
-        </div>
-        <div class="meeting-time">${esc(meeting.time || "")}</div>
-      </div>
-      ${htmlSection("Why This Meeting Matters", meeting.why_it_matters)}
-      ${htmlSection("Last Known Context", meeting.last_known_context)}
-      ${htmlSection("What Was Discussed Previously", meeting.previous_discussion)}
-      ${htmlSection("Open Threads And Follow-Ups", meeting.open_threads)}
-      ${htmlSection("People And Ownership / Relationship Notes", meeting.people_notes)}
-      ${htmlSection("Sensitive Signals", meeting.sensitive_signals, "sensitive")}
-      ${htmlSection("Suggested Discussion Plan (Recommendation)", meeting.suggested_discussion_plan, "recommendation")}
-      ${htmlSection("Questions To Ask", meeting.questions_to_ask)}
-      ${htmlSection("Risks, Blockers, Or Watchouts", meeting.watchouts)}
-      ${htmlSection("Could Not Verify", meeting.retrieval_gaps, "gap")}
-    </article>
-  `).join("\n");
-
-  return `<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>${esc(packet.title || `${packet.team} Meeting Prep`)}</title>
-  <style>${css}</style>
-</head>
-<body>
-  <header class="packet-header">
-    <div>
-      <h1>${esc(packet.title || `${packet.team} Meeting Prep`)}</h1>
-      <p>${esc(packet.scope || "Upcoming meetings")}</p>
-    </div>
-    <div class="meta">
-      <div>${esc(packet.date)}</div>
-      <div>${esc(packet.generated_at || new Date().toISOString())}</div>
-    </div>
-  </header>
-  <section class="summary">
-    <h2>Today At A Glance</h2>
-    <div class="summary-grid">
-      <div>${htmlList(packet.summary)}</div>
-      <div>${htmlSection("Top Alerts", packet.top_alerts)}</div>
-    </div>
-  </section>
-  ${meetings}
-  <div class="footer-note">Private meeting preparation packet. See the markdown file for audit details.</div>
-</body>
-</html>`;
+function relsXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`;
 }
 
-function findChrome() {
-  const env = process.env.CHROME_PATH;
-  const candidates = [
-    env,
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "/Applications/Chromium.app/Contents/MacOS/Chromium",
-    "/usr/bin/google-chrome",
-    "/usr/bin/chromium-browser",
-    "/usr/bin/chromium",
-  ].filter(Boolean);
-  return candidates.find((candidate) => fs.existsSync(candidate));
+function documentRelsXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>`;
 }
 
-function renderPdf(htmlPath, pdfPath) {
-  const chrome = findChrome();
-  if (!chrome) {
-    throw new Error("Could not find Chrome/Chromium. Set CHROME_PATH or install Google Chrome to render PDF.");
-  }
-  const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), "rockaway-pdf-"));
-  const result = spawnSync(chrome, [
-    "--headless=new",
-    "--disable-background-networking",
-    "--disable-component-update",
-    "--disable-default-apps",
-    "--disable-gpu",
-    "--disable-sync",
-    "--hide-scrollbars",
-    "--no-pdf-header-footer",
-    "--no-first-run",
-    "--no-default-browser-check",
-    "--run-all-compositor-stages-before-draw",
-    `--user-data-dir=${userDataDir}`,
-    `--print-to-pdf=${pdfPath}`,
-    `file://${htmlPath}`,
-  ], { encoding: "utf8", timeout: 20000, killSignal: "SIGKILL" });
-  fs.rmSync(userDataDir, { recursive: true, force: true });
-  if (result.error && result.error.code === "ETIMEDOUT" && fs.existsSync(pdfPath) && fs.statSync(pdfPath).size > 0) {
-    return;
-  }
+function writeDocxParts(root, packet) {
+  fs.mkdirSync(path.join(root, "_rels"), { recursive: true });
+  fs.mkdirSync(path.join(root, "word", "_rels"), { recursive: true });
+  fs.writeFileSync(path.join(root, "[Content_Types].xml"), contentTypesXml());
+  fs.writeFileSync(path.join(root, "_rels", ".rels"), relsXml());
+  fs.writeFileSync(path.join(root, "word", "document.xml"), renderDocumentXml(packet));
+  fs.writeFileSync(path.join(root, "word", "styles.xml"), stylesXml());
+  fs.writeFileSync(path.join(root, "word", "_rels", "document.xml.rels"), documentRelsXml());
+}
+
+function runZip(sourceDir, outPath) {
+  const result = spawnSync("zip", ["-qr", outPath, "."], { cwd: sourceDir, encoding: "utf8" });
+  return result.status === 0 && !result.error;
+}
+
+function runPythonZip(sourceDir, outPath) {
+  const script = `
+import os, sys, zipfile
+source, out = sys.argv[1], sys.argv[2]
+with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as zf:
+    for root, _, files in os.walk(source):
+        for name in files:
+            full = os.path.join(root, name)
+            zf.write(full, os.path.relpath(full, source))
+`;
+  const python = process.env.PYTHON || "python3";
+  const result = spawnSync(python, ["-c", script, sourceDir, outPath], { encoding: "utf8" });
   if (result.status !== 0 || result.error) {
-    throw new Error(`Chrome PDF render failed: ${result.stderr || result.stdout}`);
+    throw new Error(`Could not package DOCX with zip or python3: ${result.stderr || result.stdout || result.error}`);
+  }
+}
+
+function writeDocx(packet, outPath) {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "rockaway-docx-"));
+  try {
+    writeDocxParts(tempRoot, packet);
+    fs.rmSync(outPath, { force: true });
+    if (!runZip(tempRoot, outPath)) {
+      runPythonZip(tempRoot, outPath);
+    }
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function removeLegacyOutputs(outDir, base) {
+  for (const ext of ["json", "md", "html", "pdf"]) {
+    fs.rmSync(path.join(outDir, `${base}.${ext}`), { force: true });
   }
 }
 
@@ -249,22 +242,13 @@ function main() {
   validate(packet);
 
   const base = slugify(args.slug || `${packet.team}-meeting-prep-${packet.date}`);
-  const cssPath = path.resolve(__dirname, "../assets/packet.css");
-  const css = fs.readFileSync(cssPath, "utf8");
-
   fs.mkdirSync(outDir, { recursive: true });
 
-  const jsonPath = path.join(outDir, `${base}.json`);
-  const mdPath = path.join(outDir, `${base}.md`);
-  const htmlPath = path.join(outDir, `${base}.html`);
-  const pdfPath = path.join(outDir, `${base}.pdf`);
+  removeLegacyOutputs(outDir, base);
+  const docxPath = path.join(outDir, `${base}.docx`);
+  writeDocx(packet, docxPath);
 
-  fs.writeFileSync(jsonPath, JSON.stringify(packet, null, 2));
-  fs.writeFileSync(mdPath, renderMarkdown(packet));
-  fs.writeFileSync(htmlPath, renderHtml(packet, css));
-  renderPdf(htmlPath, pdfPath);
-
-  console.log(JSON.stringify({ json: jsonPath, markdown: mdPath, html: htmlPath, pdf: pdfPath }, null, 2));
+  console.log(JSON.stringify({ docx: docxPath }, null, 2));
 }
 
 try {

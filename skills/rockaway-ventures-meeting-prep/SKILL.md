@@ -1,6 +1,6 @@
 ---
 name: rockaway-ventures-meeting-prep
-description: Prepare a private dense PDF meeting-prep packet for Rockaway Ventures using the user's connected calendar/account context and the read-only Rockaway Ventures brain MCP. Use for Ventures meeting prep, partner meeting prep, deal/founder/fund meeting prep, today's remaining Ventures meetings, next meeting prep, or what to discuss in an upcoming Rockaway Ventures call.
+description: Prepare a private dense Word meeting-prep brief for Rockaway Ventures using the user's connected calendar/account context and the read-only Rockaway Ventures brain MCP. Use for Ventures meeting prep, partner meeting prep, deal/founder/fund meeting prep, today's remaining Ventures meetings, next meeting prep, or what to discuss in an upcoming Rockaway Ventures call.
 ---
 
 # Rockaway Ventures Meeting Prep
@@ -50,23 +50,19 @@ Mostly paraphrase. Use short direct quotes only when exact wording is unusually 
 
 ## Output Contract
 
-Produce all three surfaces every run:
+Produce two surfaces every run:
 
-1. Chat: compact summary and file links only; no source trail by default.
-2. Markdown: editable packet with full source trail.
-3. PDF: primary deliverable, one all-day dense executive packet with no source trail.
+1. Word document: primary deliverable, one all-day dense executive brief with no source trail.
+2. Chat: compact summary and Word document link only; no source trail by default.
 
 Save under the user's home directory, separated by team and date:
 
 ```text
 ~/Rockaway Meeting Briefs/ventures/YYYY-MM-DD/
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.json
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.md
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.html
-  rockaway-ventures-meeting-prep-YYYY-MM-DD.pdf
+  rockaway-ventures-meeting-prep-YYYY-MM-DD.docx
 ```
 
-Same-day reruns overwrite these default files. Use a timestamped suffix only if the user asks for archival versions.
+Same-day reruns overwrite the default Word document. Use a timestamped suffix only if the user asks for archival versions.
 
 ## Packet Content
 
@@ -84,9 +80,9 @@ Each meeting can include:
 - questions to ask
 - risks, sensitivities, or watchouts
 - could-not-verify notes only when relevant
-- source trail in markdown only
 
 Do not include blank note-taking space.
+Do not include a source trail in the Word document.
 
 ## Rendering
 
@@ -103,14 +99,13 @@ $HOME/.codex/skills/rockaway-ventures-meeting-prep/.rockaway-meeting-prep-common
 $HOME/.claude/skills/rockaway-ventures-meeting-prep/.rockaway-meeting-prep-common/scripts/render_packet.js
 ```
 
-The JSON is the source of truth. The renderer writes JSON, markdown, HTML, and PDF. PDF rendering uses headless Chrome.
+The JSON is renderer input only. The renderer writes one `.docx` Word document and does not write JSON, markdown, HTML, or PDF sidecars.
 
 ## Final Response
 
 Return a compact chat summary:
 
-- PDF link first.
-- Markdown link second.
+- Word document link first.
 - 3-7 top alerts or prep priorities.
 - Mention only meaningful retrieval gaps.
 
